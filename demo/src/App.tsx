@@ -18,9 +18,14 @@ const ort = require("onnxruntime-web");
 import npyjs from "npyjs";
 
 // Define image, embedding and model paths
-const IMAGE_PATH = "/assets/data/dogs.jpg";
-const IMAGE_EMBEDDING = "/assets/data/dogs_embedding.npy";
-const MODEL_DIR = "/model/sam_onnx_quantized_example.onnx";
+const IMAGE_PATH = "/static/processing_files/selection.png";
+const IMAGE_EMBEDDING = "/static/processing_files/image_embedding.npy";
+const MODEL_DIR = "/static/processing_files/sam_onnx_quantized_example.onnx";
+//const MODEL_DIR = "/model/sam_onnx_quantized_example.onnx";
+
+// const IMAGE_PATH = "/processing_files/selection.png";
+// const IMAGE_EMBEDDING = "/processing_files/image_embedding.npy";
+// const MODEL_DIR = "/processing_files/sam_onnx_quantized_example.onnx";
 
 const App = () => {
   const {
@@ -114,6 +119,8 @@ const App = () => {
         if (feeds === undefined) return;
         // Run the SAM ONNX model with the feeds returned from modelData()
         const results = await model.run(feeds);
+        console.log('results', results);
+        console.log('model.outputNames', model.outputNames);
         const output = results[model.outputNames[0]];
         // The predicted mask returned from the ONNX model is an array which is 
         // rendered as an HTML image using onnxMaskToImage() from maskUtils.tsx.
