@@ -9,8 +9,9 @@ import AppContext from "./hooks/createContext";
 import { ToolProps } from "./helpers/Interfaces";
 import * as _ from "underscore";
 
-const Tool = ({ handleMouseMove }: ToolProps) => {
+const Tool = ({ handleMouseClick }: ToolProps) => {
   const {
+    clicks: [clicks],
     image: [image],
     maskImg: [maskImg, setMaskImg],
   } = useContext(AppContext)!;
@@ -24,7 +25,9 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
     if (!image) return;
     const imageAspectRatio = image.width / image.height;
     const screenAspectRatio = window.innerWidth / window.innerHeight;
-    setShouldFitToWidth(imageAspectRatio > screenAspectRatio);
+    console.log('window.innerWidth / window.innerHeight', window.innerWidth / window.innerHeight);
+    // setShouldFitToWidth(imageAspectRatio > screenAspectRatio);
+    setShouldFitToWidth(false);
   };
   const resizeObserver = new ResizeObserver((entries) => {
     for (const entry of entries) {
@@ -49,9 +52,10 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
     <>
       {image && (
         <img
-          onMouseMove={handleMouseMove}
-          onMouseOut={() => _.defer(() => setMaskImg(null))}
-          onTouchStart={handleMouseMove}
+          //onMouseMove={handleMouseMove}
+          //onMouseOut={() => _.defer(() => setMaskImg(null))}
+          //onTouchStart={handleMouseMove}
+          onClick={handleMouseClick}
           src={image.src}
           className={`${
             shouldFitToWidth ? "w-full" : "h-full"
@@ -60,12 +64,21 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
       )}
       {maskImg && (
         <img
+          id='maskImage'
           src={maskImg.src}
           className={`${
             shouldFitToWidth ? "w-full" : "h-full"
           } ${maskImageClasses}`}
         ></img>
       )}
+      {/* {clicks.length > 0 && (
+        <img
+          src={maskImg.src}
+          className={`${
+            shouldFitToWidth ? "w-full" : "h-full"
+          } ${maskImageClasses}`}
+        ></img>
+      )} */}
     </>
   );
 };

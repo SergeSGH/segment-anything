@@ -29,7 +29,7 @@ const MODEL_DIR = "/static/processing_files/sam_onnx_quantized_example.onnx";
 
 const App = () => {
   const {
-    clicks: [clicks],
+    clicks: [clicks, setClicks],
     image: [, setImage],
     maskImg: [, setMaskImg],
   } = useContext(AppContext)!;
@@ -64,6 +64,7 @@ const App = () => {
     Promise.resolve(loadNpyTensor(IMAGE_EMBEDDING, "float32")).then(
       (embedding) => setTensor(embedding)
     );
+
   }, []);
 
   const loadImage = async (url: URL) => {

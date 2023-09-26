@@ -25,5 +25,7 @@ export interface modeDataProps {
 }
 
 export interface ToolProps {
-  handleMouseMove: (e: any) => void;
+  //handleMouseMove: (e: any) => void;
+  handleMouseClick: (e: any) => void;
 }
+
