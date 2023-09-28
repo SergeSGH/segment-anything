@@ -42,33 +42,27 @@ const ClicksCanvas = () => {
   }, [image]);
 
 
-  let ctx: any;
-  // function setContext(r: any) {
-  //     console.log(r);
-  //     ctx = r.getContext("2d");
-  // }
-
   useEffect(() => {
-    //console.log('ширина', image?.width);
-    //console.log('высота', image?.height);
     if (canvasRef.current) {
       const ctx = canvasRef.current?.getContext("2d");
-      if (clicks && ctx) {
-        for (let i = 0; i < clicks.length; i++) {
-          if (clicks[i].clickType === 1)
-            ctx.fillStyle = "blue";
-          else if (clicks[i].clickType === 2)
-            ctx.fillStyle = "red";
-          const pointSize = 4;
-
-          ctx.beginPath();
-          ctx.arc(clicks[i].x, clicks[i].y, pointSize / 2, 0, Math.PI * 2, false);
-          ctx.fill();
-          ctx.closePath();
-
-          //ctx.fillRect(clicks[i].x, clicks[i].y, pointSize, pointSize);
+      if (ctx) {
+        if (clicks) {
+          for (let i = 0; i < clicks.length; i++) {
+            if (clicks[i].clickType === 1)
+              ctx.fillStyle = "blue";
+            else if (clicks[i].clickType === 2)
+              ctx.fillStyle = "red";
+            const pointSize = 4;
+            ctx.beginPath();
+            ctx.arc(clicks[i].x, clicks[i].y, pointSize / 2, 0, Math.PI * 2, false);
+            ctx.fill();
+            ctx.closePath();
+          }
+        } else {
+          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         }
       }
+      
     }
     
   }, [clicks]) 
@@ -105,7 +99,6 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
     if (!image) return;
     const imageAspectRatio = image.width / image.height;
     const screenAspectRatio = window.innerWidth / window.innerHeight;
-    // console.log('window.innerWidth / window.innerHeight', window.innerWidth / window.innerHeight);
     // setShouldFitToWidth(imageAspectRatio > screenAspectRatio);
     setShouldFitToWidth(false);
   };
@@ -132,9 +125,6 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
     <>
       {image && (
         <img
-          //onMouseMove={handleMouseMove}
-          //onMouseOut={() => _.defer(() => setMaskImg(null))}
-          //onTouchStart={handleMouseMove}
           onClick={handleMouseClick}
           src={image.src}
           className={`${

@@ -27,11 +27,8 @@ const modelData = ({ clicks, tensor, modelScale }: modeDataProps) => {
     // Add clicks and scale to what SAM expects
     for (let i = 0; i < n; i++) {
       pointCoords[2 * i] = clicks[i].x * modelScale.samScale;
-      console.log('клик x', clicks[i].x, 'масштаб', modelScale.samScale, 'итог', pointCoords[2 * i]);
       pointCoords[2 * i + 1] = clicks[i].y * modelScale.samScale;
-      console.log('клик y', clicks[i].y, 'масштаб', modelScale.samScale, 'итог', pointCoords[2 * i + 1]);
       pointLabels[i] = clicks[i].clickType;
-      console.log('тип клика', pointLabels[i]);
     }
 
     // Add in the extra point/label when only clicks and no box
@@ -48,9 +45,6 @@ const modelData = ({ clicks, tensor, modelScale }: modeDataProps) => {
     modelScale.height,
     modelScale.width,
   ]);
-
-  console.log('modelScale.height', modelScale.height);
-  console.log('modelScale.width', modelScale.width);
 
   if (pointCoordsTensor === undefined || pointLabelsTensor === undefined)
     return;

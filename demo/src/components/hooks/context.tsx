@@ -20,7 +20,7 @@ const AppContextProvider = (props: {
       value={{
         clicks: [clicks, setClicks],
         image: [image, setImage],
-        maskImg: [maskImg, setMaskImg],
+        maskImg: [maskImg, setMaskImg]
       }}
     >
       {props.children}
