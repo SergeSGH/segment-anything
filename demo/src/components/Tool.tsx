@@ -4,10 +4,90 @@
 // This source code is licensed under the license found in the
 // LICENSE file in the root directory of this source tree.
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import AppContext from "./hooks/createContext";
 import { ToolProps } from "./helpers/Interfaces";
 import * as _ from "underscore";
+
+
+const ClicksCanvas = () => {
+  const {
+    clicks: [clicks],
+    image: [image],
+  } = useContext(AppContext)!;
+  
+  const [shouldFitToWidth, setShouldFitToWidth] = useState(true);
+  const bodyEl = document.body;
+  const fitToPage = () => {
+    if (!image) return;
+    const imageAspectRatio = image.width / image.height;
+    const screenAspectRatio = window.innerWidth / window.innerHeight;
+    // setShouldFitToWidth(imageAspectRatio > screenAspectRatio);
+    setShouldFitToWidth(false);
+  };
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.target === bodyEl) {
+        fitToPage();
+      }
+    }
+  });
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    fitToPage();
+    resizeObserver.observe(bodyEl);
+    return () => {
+      resizeObserver.unobserve(bodyEl);
+    };
+  }, [image]);
+
+
+  let ctx: any;
+  // function setContext(r: any) {
+  //     console.log(r);
+  //     ctx = r.getContext("2d");
+  // }
+
+  useEffect(() => {
+    //console.log('ширина', image?.width);
+    //console.log('высота', image?.height);
+    if (canvasRef.current) {
+      const ctx = canvasRef.current?.getContext("2d");
+      if (clicks && ctx) {
+        for (let i = 0; i < clicks.length; i++) {
+          if (clicks[i].clickType === 1)
+            ctx.fillStyle = "blue";
+          else if (clicks[i].clickType === 2)
+            ctx.fillStyle = "red";
+          const pointSize = 4;
+
+          ctx.beginPath();
+          ctx.arc(clicks[i].x, clicks[i].y, pointSize / 2, 0, Math.PI * 2, false);
+          ctx.fill();
+          ctx.closePath();
+
+          //ctx.fillRect(clicks[i].x, clicks[i].y, pointSize, pointSize);
+        }
+      }
+    }
+    
+  }, [clicks]) 
+
+  const clicksCanvasClasses = `absolute opacity-40 pointer-events-none`;
+
+  return (
+    <canvas
+      id='clicksCanvas'
+      height={image?.height}
+      width={image?.width}
+      ref={canvasRef}
+      className={`${
+        shouldFitToWidth ? "w-full" : "h-full"
+      } ${clicksCanvasClasses}`}
+    ></canvas>
+  )
+}
+
 
 const Tool = ({ handleMouseClick }: ToolProps) => {
   const {
@@ -25,7 +105,7 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
     if (!image) return;
     const imageAspectRatio = image.width / image.height;
     const screenAspectRatio = window.innerWidth / window.innerHeight;
-    console.log('window.innerWidth / window.innerHeight', window.innerWidth / window.innerHeight);
+    // console.log('window.innerWidth / window.innerHeight', window.innerWidth / window.innerHeight);
     // setShouldFitToWidth(imageAspectRatio > screenAspectRatio);
     setShouldFitToWidth(false);
   };
@@ -71,14 +151,7 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
           } ${maskImageClasses}`}
         ></img>
       )}
-      {/* {clicks.length > 0 && (
-        <img
-          src={maskImg.src}
-          className={`${
-            shouldFitToWidth ? "w-full" : "h-full"
-          } ${maskImageClasses}`}
-        ></img>
-      )} */}
+      <ClicksCanvas />
     </>
   );
 };

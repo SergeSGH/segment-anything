@@ -9,9 +9,10 @@ import * as _ from "underscore";
 import Tool from "./Tool";
 import { modelInputProps } from "./helpers/Interfaces";
 import AppContext from "./hooks/createContext";
-import cv from './opencv.js';
+//import { useOpenCv } from 'opencv-react';
 
 const Stage = () => {
+  //let { loaded, cv } = useOpenCv();
   const {
     clicks: [clicks, setClicks],
     image: [image],
@@ -71,20 +72,21 @@ const Stage = () => {
   document.getElementById('clear_masks')?.addEventListener('click', clearMasks);
 
 
-  function getPolygons() {
+  //function getPolygons() {
     // const script = document.createElement('script');
     // script.src = 'https://docs.opencv.org/master/opencv.js';
     // script.async = true;
     // script.onload = generatePolygons;
     // document.body.appendChild(script);
 
-    const inputImage = document.getElementById('maskImage');
+    // const inputImage = document.getElementById('maskImage');
 
-    //const src = cv.imread(inputImage);
-    console.log('прочитали изображение CV');
+    // const src = cv.imread(inputImage);
+    // console.log('прочитали изображение CV');
     
+
     //console.log('высота', inputImage.height, 'ширина', inputImage.width);
-    //const gray = new cv.Mat();
+    // const gray = new cv.Mat();
     // cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
     // cv.threshold(gray, gray, 128, 255, cv.THRESH_BINARY);
 
@@ -100,9 +102,9 @@ const Stage = () => {
     // src.delete();
     // gray.delete();
     // contours.delete();
-  }
+  //}
 
-  document.getElementById('get_polygons')?.addEventListener('click', getPolygons);
+  //document.getElementById('get_polygons')?.addEventListener('click', getPolygons);
 
   const flexCenterClasses = "flex items-center justify-center";
   return (
@@ -110,14 +112,8 @@ const Stage = () => {
       <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
         <Tool handleMouseClick={handleMouseClick} />
       </div>
-      <div>
-        <button id="get_masks" className="button">Получить маски</button>
         <button id="clear_masks" className="button">Очистить маски</button>
-        <button id="get_polygons" className="button">Получить полигоны</button>
-        <button id="save_polygons" className="button">Сохранить</button>
-      </div>
     </div>
-    
   );
 };
 

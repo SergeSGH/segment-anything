@@ -9,8 +9,27 @@ import { createRoot } from "react-dom/client";
 import AppContextProvider from "./components/hooks/context";
 import App from "./App";
 import 'bulma/css/bulma.css';
+//import { OpenCvProvider } from 'opencv-react';
+
+// const express = require('express');
+// const path = require('path');
+
+// const app = express();
+
+// // Указываем Express использовать статические файлы из корневой директории
+// app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 const container = document.getElementById("root");
 const root = createRoot(container!);
+// root.render(
+//   <AppContextProvider>
+//     <OpenCvProvider>
+//       <App/>
+//     </OpenCvProvider>
+//   </AppContextProvider>
+// );
 root.render(
   <AppContextProvider>
     <App/>

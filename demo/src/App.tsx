@@ -5,7 +5,7 @@
 // LICENSE file in the root directory of this source tree.
 
 import { InferenceSession, Tensor } from "onnxruntime-web";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import "./assets/scss/App.scss";
 import { handleImageScale } from "./components/helpers/scaleHelper";
 import { modelScaleProps } from "./components/helpers/Interfaces";
@@ -27,9 +27,15 @@ const MODEL_DIR = "/static/processing_files/sam_onnx_quantized_example.onnx";
 // const IMAGE_EMBEDDING = "/processing_files/image_embedding.npy";
 // const MODEL_DIR = "/processing_files/sam_onnx_quantized_example.onnx";
 
+
 const App = () => {
+  // const { loaded, cv } = useOpenCv()
+  // const onLoaded = (cv) => {
+  //   console.log('opencv loaded', cv)
+  // }
+
   const {
-    clicks: [clicks, setClicks],
+    clicks: [clicks],
     image: [, setImage],
     maskImg: [, setMaskImg],
   } = useContext(AppContext)!;
@@ -120,8 +126,8 @@ const App = () => {
         if (feeds === undefined) return;
         // Run the SAM ONNX model with the feeds returned from modelData()
         const results = await model.run(feeds);
-        console.log('results', results);
-        console.log('model.outputNames', model.outputNames);
+        //console.log('results', results);
+        //console.log('model.outputNames', model.outputNames);
         const output = results[model.outputNames[0]];
         // The predicted mask returned from the ONNX model is an array which is 
         // rendered as an HTML image using onnxMaskToImage() from maskUtils.tsx.
