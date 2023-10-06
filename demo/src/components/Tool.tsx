@@ -62,7 +62,6 @@ const ClicksCanvas = () => {
           ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         }
       }
-      
     }
     
   }, [clicks]) 
@@ -75,6 +74,63 @@ const ClicksCanvas = () => {
       height={image?.height}
       width={image?.width}
       ref={canvasRef}
+      className={`${
+        shouldFitToWidth ? "w-full" : "h-full"
+      } ${clicksCanvasClasses}`}
+    ></canvas>
+  )
+}
+
+
+const MasksCanvas = () => {
+  const {
+    maskImg: [maskImg],
+    image: [image],
+  } = useContext(AppContext)!;
+  
+  const [shouldFitToWidth, setShouldFitToWidth] = useState(true);
+  const bodyEl = document.body;
+  const fitToPage = () => {
+    setShouldFitToWidth(false);
+  };
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.target === bodyEl) {
+        fitToPage();
+      }
+    }
+  });
+  const masksRef = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    fitToPage();
+    resizeObserver.observe(bodyEl);
+    return () => {
+      resizeObserver.unobserve(bodyEl);
+    };
+  }, [image]);
+
+  useEffect(() => {
+    if (masksRef.current) {
+      const ctx = masksRef.current?.getContext("2d");
+      if (ctx) {
+        if (maskImg) {
+          ctx?.drawImage(maskImg, 0, 0)
+        } else {
+          ctx.clearRect(0, 0, masksRef.current.width, masksRef.current.height);
+        }
+      }
+    
+    }
+  }, [maskImg]) 
+
+  const clicksCanvasClasses = `absolute opacity-40 pointer-events-none`;
+
+  return (
+    <canvas
+      id='maskImage'
+      height={image?.height}
+      width={image?.width}
+      ref={masksRef}
       className={`${
         shouldFitToWidth ? "w-full" : "h-full"
       } ${clicksCanvasClasses}`}
@@ -132,7 +188,7 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
           } ${imageClasses}`}
         ></img>
       )}
-      {maskImg && (
+      {/* {maskImg && (
         <img
           id='maskImage'
           src={maskImg.src}
@@ -140,7 +196,8 @@ const Tool = ({ handleMouseClick }: ToolProps) => {
             shouldFitToWidth ? "w-full" : "h-full"
           } ${maskImageClasses}`}
         ></img>
-      )}
+      )} */}
+      <MasksCanvas />
       <ClicksCanvas />
     </>
   );

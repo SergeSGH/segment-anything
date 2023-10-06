@@ -51,9 +51,11 @@ const Stage = () => {
 
   function clearMasks() {
     setClicks(null);
-    setMaskImg(null)
+    setMaskImg(null);
     document.getElementById('clear_masks')?.classList.add('disabled');
     document.getElementById('get_polygons')?.classList.add('disabled');
+    document.getElementById('save_modal_polygons')?.classList.add('disabled');
+    document.getElementById('save_modal_object')?.classList.add('disabled');
   }
 
   document.getElementById('clear_masks')?.addEventListener('click', clearMasks);

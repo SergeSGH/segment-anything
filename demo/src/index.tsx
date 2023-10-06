@@ -8,7 +8,7 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import AppContextProvider from "./components/hooks/context";
 import App from "./App";
-import 'bulma/css/bulma.css';
+//import 'bulma/css/bulma.css';
 
 const container = document.getElementById("root");
 const root = createRoot(container!);

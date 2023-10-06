@@ -23,11 +23,10 @@ const IMAGE_EMBEDDING = "/static/processing_files/image_embedding.npy";
 const MODEL_DIR = "/static/processing_files/sam_onnx_quantized_example.onnx";
 
 const App = () => {
-
-  const {
+  let {
     clicks: [clicks],
     image: [, setImage],
-    maskImg: [, setMaskImg],
+    maskImg: [maskImg, setMaskImg],
   } = useContext(AppContext)!;
   const [model, setModel] = useState<InferenceSession | null>(null); // ONNX model
   const [tensor, setTensor] = useState<Tensor | null>(null); // Image embedding tensor
@@ -108,6 +107,7 @@ const App = () => {
       else {
         // Preapre the model input in the correct format for SAM. 
         // The modelData function is from onnxModelAPI.tsx.
+        clicks = [clicks[clicks.length - 1]];
         const feeds = modelData({
           clicks,
           tensor,
